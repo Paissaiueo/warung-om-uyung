@@ -117,7 +117,7 @@ if (revealEls.length) {
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry, i) => {
       if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        setTimeout(() => entry.target.classList.add('visible'), i * 200);
         revealObserver.unobserve(entry.target);
       }
     });
@@ -135,6 +135,66 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     }
   });
 });
+
+// 4. Gallery Lightbox Logic
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightboxImg');
+const lightboxCap = document.getElementById('lightboxCap');
+const lightboxClose = document.getElementById('lightboxClose');
+const lightboxPrev = document.getElementById('lightboxPrev');
+const lightboxNext = document.getElementById('lightboxNext');
+const galleryImages = document.querySelectorAll('.galeri-item img');
+
+let currentImgIndex = 0;
+
+if (lightbox && galleryImages.length) {
+  const openLightbox = (index) => {
+    currentImgIndex = index;
+    const img = galleryImages[index];
+    lightboxImg.src = img.src;
+    lightboxCap.innerText = img.nextElementSibling ? img.nextElementSibling.innerText : '';
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Lock scroll
+  };
+
+  const closeLightbox = () => {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = ''; // Unlock scroll
+  };
+
+  const nextImg = () => {
+    currentImgIndex = (currentImgIndex + 1) % galleryImages.length;
+    openLightbox(currentImgIndex);
+  };
+
+  const prevImg = () => {
+    currentImgIndex = (currentImgIndex - 1 + galleryImages.length) % galleryImages.length;
+    openLightbox(currentImgIndex);
+  };
+
+  galleryImages.forEach((img, index) => {
+    img.parentElement.addEventListener('click', () => openLightbox(index));
+  });
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightboxPrev.addEventListener('click', (e) => { e.stopPropagation(); prevImg(); });
+  lightboxNext.addEventListener('click', (e) => { e.stopPropagation(); nextImg(); });
+  
+  // Close on click outside
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox || e.target.classList.contains('lightbox-overlay')) {
+      closeLightbox();
+    }
+  });
+
+  // Keyboard support
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') nextImg();
+    if (e.key === 'ArrowLeft') prevImg();
+  });
+}
 
 // ── TRANSLATIONS ──
 const translations = {

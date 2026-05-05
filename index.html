@@ -155,12 +155,12 @@
 
   <!-- SEJARAH -->
   <section id="sejarah">
-    <div class="sejarah-wrap reveal">
+    <div class="sejarah-wrap">
       <p class="section-label" data-i18n="sejarah_label">// 002 — Sejarah</p>
       <h2 class="section-title" data-i18n="sejarah_title">DARI BAWAH,<br>KINI <span class="line-red">DI ATAS.</span>
       </h2>
       <div class="sejarah-timeline">
-        <div class="timeline-item">
+        <div class="timeline-item reveal">
           <div class="timeline-dot"></div>
           <div class="timeline-year">2016</div>
           <div class="timeline-content">
@@ -171,7 +171,7 @@
               tanpa gedung, tanpa fasilitas mewah. Hanya niat tulus untuk melayani dan mencari rezeki bersama.</p>
           </div>
         </div>
-        <div class="timeline-item">
+        <div class="timeline-item reveal">
           <div class="timeline-dot"></div>
           <div class="timeline-year">↑</div>
           <div class="timeline-content">
@@ -183,7 +183,7 @@
               Lebih terlindungi, lebih nyaman, dan makin mudah dijangkau pelanggan.</p>
           </div>
         </div>
-        <div class="timeline-item">
+        <div class="timeline-item reveal">
           <div class="timeline-dot"></div>
           <div class="timeline-year" data-i18n="timeline_3_year">Kini</div>
           <div class="timeline-content">
@@ -467,6 +467,14 @@
           <span class="info-label">WhatsApp</span>
           <span class="info-val">+62 821-4218-2427</span>
         </li>
+        <li>
+          <span class="info-label">Instagram</span>
+          <span class="info-val">@warungomuyung</span>
+        </li>
+        <li>
+          <span class="info-label">TikTok</span>
+          <span class="info-val">@warung.om.uyung</span>
+        </li>
       </ul>
       <a href="https://wa.me/6282142182427?text=Halo%20Om%20Uyung!%20Mau%20tanya-tanya%20dulu." target="_blank"
         class="wa-btn" data-i18n="contact_wa_btn">
@@ -493,6 +501,7 @@
       Santai</p>
     <div class="footer-socials">
       <a href="https://instagram.com/warungomuyung" target="_blank">Instagram</a>
+      <a href="https://tiktok.com/@warung.om.uyung" target="_blank">TikTok</a>
       <a href="https://wa.me/6282142182427" target="_blank">WhatsApp</a>
     </div>
   </footer>
@@ -501,6 +510,18 @@
   <a href="#hero" id="btt">↑</a>
 
 
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" class="lightbox">
+    <div class="lightbox-overlay"></div>
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightboxClose">&times;</button>
+      <button class="lightbox-nav prev" id="lightboxPrev">❮</button>
+      <img src="" alt="Lightbox Image" id="lightboxImg">
+      <button class="lightbox-nav next" id="lightboxNext">❯</button>
+      <div class="lightbox-caption" id="lightboxCap"></div>
+    </div>
+  </div>
 
   <script src="js/main.js"></script>
 </body>

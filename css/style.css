@@ -17,7 +17,7 @@
   --border: #333;
   --nav-bg: rgba(10, 10, 10, 0.92);
   --font-display: 'Bebas Neue', sans-serif;
-  --font-body: 'Bebas Neue', sans-serif;
+  --font-body: 'Syne', sans-serif;
   --font-mono: 'DM Mono', monospace;
 }
 
@@ -295,7 +295,7 @@ body {
   border-radius: 50%;
   position: fixed;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 20000;
   transition: transform 0.15s ease;
   mix-blend-mode: difference;
 }
@@ -307,7 +307,7 @@ body {
   border-radius: 50%;
   position: fixed;
   pointer-events: none;
-  z-index: 9998;
+  z-index: 19999;
   transition: all 0.25s ease;
   mix-blend-mode: difference;
 }
@@ -330,12 +330,18 @@ nav {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 4rem;
-  transition: all 0.4s ease;
+  padding: 1.5rem 4rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(to bottom, rgba(10, 10, 10, 0.5) 0%, transparent 100%);
+  backdrop-filter: blur(0px);
+}
+
+[data-theme="light"] nav {
+  background: linear-gradient(to bottom, rgba(245, 240, 232, 0.5) 0%, transparent 100%);
 }
 
 /* Body scroll lock when mobile menu is open */
@@ -352,9 +358,15 @@ body.menu-open #btt {
 
 nav.scrolled {
   background: var(--nav-bg);
-  backdrop-filter: blur(12px);
-  padding: 0.6rem 4rem;
-  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  padding: 0.8rem 4rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] nav.scrolled {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 /* LOGO — lebih besar */
@@ -387,15 +399,22 @@ nav.scrolled .nav-logo img {
   font-family: var(--font-body);
   color: var(--text);
   text-decoration: none;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   letter-spacing: 0.5px;
   font-weight: 500;
-  transition: opacity 0.2s;
-  opacity: 0.75;
+  transition: all 0.3s ease;
+  opacity: 0.85;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="light"] .nav-links a {
+  text-shadow: none;
 }
 
 .nav-links a:hover {
   opacity: 1;
+  color: var(--accent);
+  transform: translateY(-2px);
 }
 
 /* NAV ACTIONS — WA button + theme toggle */
@@ -455,6 +474,20 @@ nav.scrolled .nav-logo img {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
 }
 
+.theme-toggle, .lang-toggle {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text);
+}
+
+[data-theme="light"] .theme-toggle, 
+[data-theme="light"] .lang-toggle {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
 /* LANG TOGGLE */
 .lang-toggle {
   background: var(--card-bg-alt);
@@ -483,15 +516,19 @@ nav.scrolled .nav-logo img {
 }
 
 .sun-icon {
+  display: block;
+}
+
+.moon-icon {
   display: none;
 }
 
 [data-theme="light"] .sun-icon {
-  display: block;
+  display: none;
 }
 
 [data-theme="light"] .moon-icon {
-  display: none;
+  display: block;
 }
 
 /* HAMBURGER */
@@ -907,11 +944,19 @@ nav.scrolled .nav-logo img {
 }
 
 .menu-card {
-  background: var(--bg);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   position: relative;
   overflow: hidden;
   cursor: none;
-  transition: transform 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+[data-theme="light"] .menu-card {
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .menu-card.hidden {
@@ -1793,6 +1838,24 @@ footer {
   align-items: center;
 }
 
+.timeline-item.reveal {
+  opacity: 0;
+  transition: all 1s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.timeline-item.reveal:nth-child(odd) {
+  transform: translateX(-60px);
+}
+
+.timeline-item.reveal:nth-child(even) {
+  transform: translateX(60px);
+}
+
+.timeline-item.reveal.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
 .timeline-item:last-child {
   margin-bottom: 0;
 }
@@ -1966,6 +2029,127 @@ footer {
     opacity: 0.15;
     margin-bottom: -1rem;
   }
+}
+
+/* LIGHTBOX */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 11000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  padding: 2rem;
+}
+
+.lightbox.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+.lightbox-content {
+  position: relative;
+  z-index: 2;
+  max-width: 90%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: scale(0.9);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.lightbox.active .lightbox-content {
+  transform: scale(1);
+}
+
+#lightboxImg {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: -3rem;
+  right: 0;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2.5rem;
+  cursor: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.lightbox-close:hover {
+  opacity: 1;
+}
+
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: none;
+  font-size: 1.2rem;
+  transition: all 0.3s;
+  backdrop-filter: blur(5px);
+}
+
+.lightbox-nav:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.lightbox-nav.prev {
+  left: -4rem;
+}
+
+.lightbox-nav.next {
+  right: -4rem;
+}
+
+.lightbox-caption {
+  margin-top: 1.5rem;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .lightbox-nav.prev { left: 0.5rem; }
+  .lightbox-nav.next { right: 0.5rem; }
+  .lightbox-nav {
+    width: 40px;
+    height: 40px;
+    background: rgba(0,0,0,0.5);
+  }
+  .lightbox-close { top: -2.5rem; right: 0.5rem; }
 }
 
 @media (max-width: 480px) {
