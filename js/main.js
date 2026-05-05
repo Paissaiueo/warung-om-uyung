@@ -7,11 +7,11 @@ function hideLoadingScreen() {
 
 // Hide loading screen dengan multiple triggers untuk memastikan
 document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(hideLoadingScreen, 2000);
+  setTimeout(hideLoadingScreen, 500);
 });
 
 window.addEventListener('load', () => {
-  setTimeout(hideLoadingScreen, 2000);
+  hideLoadingScreen();
 });
 
 // Fallback: hide jika terlalu lama
@@ -279,7 +279,13 @@ const translations = {
     contact_hours_val: "Senin - Sabtu<br>09.00 — 22.00 WIB",
     contact_wa_btn: "Chat di WhatsApp",
     map_tag: "TEMUKAN KAMI",
-    footer_copy: "© 2026 Warung Om Uyung — Bondowoso, Jawa Timur<br>Makan · Minum · Santai"
+    footer_copy: "© 2026 Warung Om Uyung — Bondowoso, Jawa Timur<br>Makan · Minum · Santai",
+    add_to_cart: "+ Keranjang",
+    cart_title: "Keranjang Saya",
+    cart_total: "Total",
+    cart_checkout: "Checkout WhatsApp",
+    placeholder_name: "Nama Anda...",
+    placeholder_notes: "Catatan tambahan (opsional)..."
   },
   en: {
     nav_about: "About",
@@ -362,7 +368,13 @@ const translations = {
     contact_hours_val: "Monday - Saturday<br>09.00 — 22.00 WIB",
     contact_wa_btn: "Chat on WhatsApp",
     map_tag: "FIND US",
-    footer_copy: "© 2026 Warung Om Uyung — Bondowoso, East Java<br>Eat · Drink · Chill"
+    footer_copy: "© 2026 Warung Om Uyung — Bondowoso, East Java<br>Eat · Drink · Chill",
+    add_to_cart: "+ Cart",
+    cart_title: "My Cart",
+    cart_total: "Total",
+    cart_checkout: "Checkout WhatsApp",
+    placeholder_name: "Your Name...",
+    placeholder_notes: "Additional notes (optional)..."
   }
 };
 
@@ -371,6 +383,13 @@ function setLanguage(lang) {
     const key = el.getAttribute('data-i18n');
     if (translations[lang][key]) {
       el.innerHTML = translations[lang][key];
+    }
+  });
+
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (translations[lang][key]) {
+      el.placeholder = translations[lang][key];
     }
   });
   // Update toggle button text
