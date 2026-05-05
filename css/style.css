@@ -60,6 +60,32 @@ html {
   overflow-x: hidden;
 }
 
+/* CUSTOM SCROLLBAR */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 5px;
+  border: 2px solid var(--bg);
+  transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Firefox Support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) var(--bg);
+}
+
 /* ── LOADING SCREEN ── */
 .loading-screen {
   position: fixed;
@@ -369,7 +395,7 @@ nav.scrolled {
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-/* LOGO — lebih besar */
+/* LOGO â€” lebih besar */
 .nav-logo {
   display: flex;
   align-items: center;
@@ -378,14 +404,14 @@ nav.scrolled {
 }
 
 .nav-logo img {
-  height: 110px;
+  height: 120px;
   width: auto;
   object-fit: contain;
   transition: height 0.3s ease;
 }
 
 nav.scrolled .nav-logo img {
-  height: 70px;
+  height: 80px;
 }
 
 /* NAV LINKS */
@@ -417,7 +443,7 @@ nav.scrolled .nav-logo img {
   transform: translateY(-2px);
 }
 
-/* NAV ACTIONS — WA button + theme toggle */
+/* NAV ACTIONS â€” WA button + theme toggle */
 .nav-actions {
   display: flex;
   align-items: center;
@@ -474,7 +500,8 @@ nav.scrolled .nav-logo img {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
 }
 
-.theme-toggle, .lang-toggle {
+.theme-toggle,
+.lang-toggle {
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -482,7 +509,7 @@ nav.scrolled .nav-logo img {
   color: var(--text);
 }
 
-[data-theme="light"] .theme-toggle, 
+[data-theme="light"] .theme-toggle,
 [data-theme="light"] .lang-toggle {
   background: rgba(0, 0, 0, 0.05);
   border: 1px solid rgba(0, 0, 0, 0.08);
@@ -1300,51 +1327,180 @@ nav.scrolled .nav-logo img {
 footer {
   background: var(--bg);
   border-top: 1px solid var(--border);
-  padding: 4rem;
+  padding: 6rem 0 0;
+  position: relative;
+  z-index: 10;
+}
+
+.footer-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 4rem;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr 1fr;
+  gap: 4rem;
+  padding-bottom: 5rem;
+}
+
+.footer-col.brand {
+  max-width: 350px;
+}
+
+.footer-logo-img {
+  height: 110px;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 0 10px rgba(21, 128, 61, 0.2));
+}
+
+.footer-desc {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.footer-tag {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.footer-h {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 1.5px;
+  margin-bottom: 2rem;
+  color: var(--text);
+  text-transform: uppercase;
+}
+
+.footer-links {
+  list-style: none;
+}
+
+.footer-links li {
+  margin-bottom: 1rem;
+}
+
+.footer-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: var(--accent);
+  padding-left: 5px;
+}
+
+.footer-info-list {
+  list-style: none;
+}
+
+.footer-info-list li {
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.info-label-footer {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.3rem;
+}
+
+.info-text-footer {
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.footer-social-icons {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-link {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 2rem;
-}
-
-.footer-logo {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  letter-spacing: 2px;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  background: var(--card-bg);
   color: var(--text);
+  border: 1px solid var(--border);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.footer-logo span {
-  color: var(--accent);
+.social-link svg {
+  width: 20px;
+  height: 20px;
+}
+
+.social-link:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: translateY(-5px) rotate(8deg);
+  border-color: var(--accent);
+  box-shadow: 0 10px 20px rgba(21, 128, 61, 0.3);
+}
+
+.footer-bottom {
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .footer-copy {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 2px;
+  font-size: 0.8rem;
   color: var(--muted);
   text-align: center;
-  line-height: 1.8;
+  letter-spacing: 1px;
+  line-height: 1.6;
 }
 
-.footer-socials {
-  display: flex;
-  gap: 1.5rem;
+.mob-break {
+  display: none;
 }
 
-.footer-socials a {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 2px;
-  color: var(--muted);
-  text-decoration: none;
-  text-transform: uppercase;
-  transition: color 0.2s;
+@media (max-width: 1100px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
 }
 
-.footer-socials a:hover {
-  color: var(--text);
+@media (max-width: 600px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .footer-col.brand {
+    max-width: 100%;
+  }
+
+  .footer-social-icons {
+    justify-content: center;
+  }
+
+  .footer-info-list li {
+    align-items: center;
+  }
+
+  .mob-break {
+    display: block;
+  }
 }
 
 /* BACK TO TOP */
@@ -1460,11 +1616,11 @@ footer {
   }
 
   .nav-logo img {
-    height: 55px;
+    height: 65px;
   }
 
   nav.scrolled .nav-logo img {
-    height: 45px;
+    height: 55px;
   }
 
   /* Mobile Nav Overlay (dark backdrop) */
@@ -1785,7 +1941,7 @@ footer {
   }
 }
 
-/* ── SEJARAH ── */
+/* â”€â”€ SEJARAH â”€â”€ */
 #sejarah {
   padding: 10rem 4rem;
   background: linear-gradient(to bottom, var(--bg) 0%, var(--card-bg) 100%);
@@ -2142,14 +2298,24 @@ footer {
 }
 
 @media (max-width: 768px) {
-  .lightbox-nav.prev { left: 0.5rem; }
-  .lightbox-nav.next { right: 0.5rem; }
+  .lightbox-nav.prev {
+    left: 0.5rem;
+  }
+
+  .lightbox-nav.next {
+    right: 0.5rem;
+  }
+
   .lightbox-nav {
     width: 40px;
     height: 40px;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
   }
-  .lightbox-close { top: -2.5rem; right: 0.5rem; }
+
+  .lightbox-close {
+    top: -2.5rem;
+    right: 0.5rem;
+  }
 }
 
 @media (max-width: 480px) {

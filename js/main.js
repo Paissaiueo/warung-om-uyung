@@ -1,4 +1,3 @@
-// ── LOADING SCREEN ──
 function hideLoadingScreen() {
   const loadingScreen = document.getElementById('loadingScreen');
   if (loadingScreen && !loadingScreen.classList.contains('hidden')) {
@@ -17,6 +16,7 @@ window.addEventListener('load', () => {
 
 // Fallback: hide jika terlalu lama
 setTimeout(hideLoadingScreen, 2000);
+
 
 // ── CURSOR ──
 const cursor = document.getElementById('cursor');
@@ -179,7 +179,7 @@ if (lightbox && galleryImages.length) {
   lightboxClose.addEventListener('click', closeLightbox);
   lightboxPrev.addEventListener('click', (e) => { e.stopPropagation(); prevImg(); });
   lightboxNext.addEventListener('click', (e) => { e.stopPropagation(); nextImg(); });
-  
+
   // Close on click outside
   lightbox.addEventListener('click', (e) => {
     if (e.target === lightbox || e.target.classList.contains('lightbox-overlay')) {
@@ -411,7 +411,7 @@ window.addEventListener('scroll', () => {
 // 3. Parallax Effect
 window.addEventListener('scroll', () => {
   const scrolled = window.scrollY;
-  
+
   // Hero Parallax
   // const heroImg = document.querySelector('.hero-img');
   // if (heroImg) {
