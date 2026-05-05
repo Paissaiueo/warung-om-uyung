@@ -429,3 +429,222 @@ window.addEventListener('scroll', () => {
     }
   });
 });
+
+// =====================
+// CART LOGIC
+// =====================
+let cart = [];
+
+const floatingCart = document.getElementById('floatingCart');
+const navCartBtn = document.getElementById('navCartBtn');
+const cartSidebar = document.getElementById('cartSidebar');
+const cartOverlay = document.getElementById('cartOverlay');
+const closeCartBtn = document.getElementById('closeCart');
+const cartBadge = document.getElementById('cartBadge');
+const navCartBadge = document.getElementById('navCartBadge');
+const cartItemsContainer = document.getElementById('cartItems');
+const cartTotalEl = document.getElementById('cartTotal');
+const checkoutBtn = document.getElementById('checkoutBtn');
+
+// Function to format Rupiah
+const formatRp = (num) => {
+  return 'Rp ' + num.toLocaleString('id-ID');
+};
+
+// Add to Cart Event
+document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation(); // prevent card click
+    const card = btn.closest('.menu-card');
+    const name = card.dataset.name;
+    const price = parseInt(card.dataset.price);
+    const img = card.dataset.img;
+
+    const existingItem = cart.find(item => item.name === name);
+    if (existingItem) {
+      existingItem.qty += 1;
+    } else {
+      cart.push({ name, price, img, qty: 1 });
+    }
+
+    updateCartUI();
+
+    // --- Fly to Cart Animation ---
+    const btnRect = btn.getBoundingClientRect();
+    const targetEl = document.getElementById('navCartBtn');
+    const targetRect = targetEl ? targetEl.getBoundingClientRect() : null;
+
+    if (targetRect) {
+      const dot = document.createElement('div');
+      dot.classList.add('fly-dot');
+
+      // Start position: center of button
+      const startX = btnRect.left + btnRect.width / 2;
+      const startY = btnRect.top + btnRect.height / 2;
+
+      // End position: center of navbar cart icon
+      const endX = targetRect.left + targetRect.width / 2;
+      const endY = targetRect.top + targetRect.height / 2;
+
+      // Calculate distance
+      const deltaX = endX - startX;
+      const deltaY = endY - startY;
+
+      dot.style.left = startX + 'px';
+      dot.style.top = startY + 'px';
+      dot.style.setProperty('--fly-x', deltaX + 'px');
+      dot.style.setProperty('--fly-y', deltaY + 'px');
+
+      document.body.appendChild(dot);
+
+      // Remove after animation
+      dot.addEventListener('animationend', () => {
+        dot.remove();
+        // Pulse the navbar cart icon
+        if (targetEl) {
+          targetEl.classList.add('cart-pulse');
+          setTimeout(() => targetEl.classList.remove('cart-pulse'), 400);
+        }
+      });
+    }
+    
+    // Animate button text (prevent text sticking on double click)
+    if (btn.dataset.animating === "true") return;
+    
+    btn.dataset.animating = "true";
+    btn.innerText = "✓ Ditambahkan";
+    btn.style.background = "#25d366";
+    btn.style.color = "#fff";
+    btn.style.borderColor = "#25d366";
+    
+    setTimeout(() => {
+      btn.innerText = "+ Keranjang";
+      btn.style = "";
+      btn.dataset.animating = "false";
+    }, 1500);
+  });
+});
+
+// Update Cart UI
+function updateCartUI() {
+  // Update Badge
+  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+  if(cartBadge) cartBadge.innerText = totalItems;
+  if(navCartBadge) {
+    navCartBadge.innerText = totalItems;
+    if (totalItems > 0) {
+      navCartBadge.classList.add('visible');
+    } else {
+      navCartBadge.classList.remove('visible');
+    }
+  }
+
+  if (totalItems > 0) {
+    if(floatingCart) floatingCart.classList.add('visible');
+    if(checkoutBtn) checkoutBtn.disabled = false;
+  } else {
+    if(floatingCart) floatingCart.classList.remove('visible');
+    if(checkoutBtn) checkoutBtn.disabled = true;
+  }
+
+  // Update Items List
+  if(!cartItemsContainer) return;
+  cartItemsContainer.innerHTML = '';
+  
+  if (cart.length === 0) {
+    cartItemsContainer.innerHTML = '<div class="cart-empty">Keranjang masih kosong</div>';
+    if(cartTotalEl) cartTotalEl.innerText = formatRp(0);
+    return;
+  }
+
+  let totalPrice = 0;
+
+  cart.forEach((item, index) => {
+    totalPrice += item.price * item.qty;
+    
+    const itemEl = document.createElement('div');
+    itemEl.classList.add('cart-item');
+    itemEl.innerHTML = `
+      <img src="${item.img}" alt="${item.name}" class="cart-item-img">
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">${formatRp(item.price)}</div>
+      </div>
+      <div class="cart-item-controls">
+        <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
+        <span class="item-qty">${item.qty}</span>
+        <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
+      </div>
+    `;
+    cartItemsContainer.appendChild(itemEl);
+  });
+
+  if(cartTotalEl) cartTotalEl.innerText = formatRp(totalPrice);
+}
+
+// Update Quantity globally
+window.updateQty = (index, change) => {
+  if (cart[index]) {
+    cart[index].qty += change;
+    if (cart[index].qty <= 0) {
+      cart.splice(index, 1);
+    }
+    updateCartUI();
+  }
+};
+
+// Open/Close Cart
+const openCart = () => {
+  cartSidebar.classList.add('active');
+  cartOverlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+};
+
+if (floatingCart) floatingCart.addEventListener('click', openCart);
+if (navCartBtn) navCartBtn.addEventListener('click', openCart);
+
+const closeCart = () => {
+  if(cartSidebar) cartSidebar.classList.remove('active');
+  if(cartOverlay) cartOverlay.classList.remove('active');
+  document.body.style.overflow = '';
+};
+
+if (closeCartBtn) closeCartBtn.addEventListener('click', closeCart);
+if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
+
+// Checkout via WhatsApp
+if (checkoutBtn) {
+  checkoutBtn.addEventListener('click', () => {
+    if (cart.length === 0) return;
+
+    const customerName = document.getElementById('customerName')?.value.trim() || '';
+    const customerNotes = document.getElementById('customerNotes')?.value.trim() || '';
+
+    let text = "Halo Om Uyung! Saya ingin memesan menu berikut:%0A%0A";
+    
+    if (customerName) {
+      text = `Halo Om Uyung!%0A%0A*Nama Pemesan:* ${customerName}%0A%0APesanan:%0A`;
+    }
+
+    let total = 0;
+    
+    cart.forEach(item => {
+      const itemTotal = item.price * item.qty;
+      total += itemTotal;
+      text += `- ${item.qty}x ${item.name} (Rp ${item.price.toLocaleString('id-ID')})%0A`;
+    });
+    
+    text += `%0A*Total: Rp ${total.toLocaleString('id-ID')}*`;
+
+    if (customerNotes) {
+      text += `%0A%0A*Catatan:* ${customerNotes}`;
+    }
+
+    text += `%0A%0AMohon disiapkan ya! 🙏`;
+    
+    const waNumber = "6282142182427";
+    const waLink = `https://wa.me/${waNumber}?text=${text}`;
+    
+    window.open(waLink, '_blank');
+  });
+}
